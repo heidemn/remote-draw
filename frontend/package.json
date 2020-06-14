@@ -1,0 +1,19 @@
+{
+  "name": "remote-draw-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "remote-draw.js",
+  "scripts": {
+    "start": "echo 'Use backend server instead!' && exit 1",
+    "start-old": "http-server . -c-1 -p 42024 -o /"
+  },
+  "author": "Martin Heide",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io-client": "^2.3.0",
+    "timeago.js": "^4.0.2"
+  },
+  "dependencies-old": {
+    "http-server": "^0.12.3"
+  }
+}
