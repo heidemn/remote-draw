@@ -1,26 +1,25 @@
-FROM node:alpine-14 AS builder
+FROM node:14-alpine AS builder
 COPY . /app
 
 WORKDIR /app/frontend
 RUN npm ci --production
 
-RUN mkdir -p /build/frontend/node_modules/
-RUN cp -r node_modules/socket.io-client /build/frontend/node_modules/
-RUN cp -r node_modules/timeago.js /build/frontend/node_modules/
+RUN mv node_modules node_modules0
+RUN mkdir node_modules
+RUN mv node_modules0/socket.io-client node_modules/socket.io-client
+RUN mv node_modules0/timeago.js       node_modules/timeago.js
+RUN rm -r node_modules0
 # DEBUG
-RUN find /build/frontend/
+RUN find /app/frontend/
 
 WORKDIR /app/backend
 RUN npm ci --production
 
-WORKDIR /
-RUN mv /app/backend /build/backend
-
 ############################################
 
-FROM node:alpine-14
+FROM node:14-alpine
 
-COPY --from=builder /build /app
+COPY --from=builder /app /app
 
 EXPOSE 42024
 WORKDIR /app/backend

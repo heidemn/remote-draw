@@ -141,4 +141,5 @@ io.on('connection', socket => {
 	});
 });
 
-server.listen(42024, () => console.log('Frontend + Socket.IO listening on port 42024!'));
+const port = parseInt(process.env.PORT || 42024);
+server.listen(port, () => console.log(`Frontend + Socket.IO listening on port ${port}!`));
