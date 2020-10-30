@@ -1,11 +1,12 @@
 let games = [];
 
-const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-const backendUrl = isLocal ?
-	`${window.location.protocol}//${window.location.hostname}:42023` :
-	`${window.location.protocol}//backend.${window.location.host}`;
-console.log('Connecting to backend', backendUrl);
-let socket = io(backendUrl);
+// const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+// const backendUrl = isLocal ?
+// 	`${window.location.protocol}//${window.location.hostname}:42023` :
+// 	`${window.location.protocol}//backend.${window.location.host}`;
+// console.log('Connecting to backend', backendUrl);
+// let socket = io(backendUrl);
+let socket = io();
 
 function getName() {
 	let nameInput = document.getElementById('name');

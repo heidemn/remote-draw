@@ -1,4 +1,12 @@
-const io = require('socket.io')();
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+// TODO: no-cache ?
+app.use('/', express.static(__dirname + '/../frontend'));
+
+//const io = require('socket.io')();
 // var rndWord = require('random-noun-generator-german');
 // // generate a random german noun
 // console.log(rndWord());
@@ -132,11 +140,5 @@ io.on('connection', socket => {
 		io.to(gameId).emit('picture', games[gameId].picture);
 	});
 });
-io.listen(42023);
-io.httpServer.on('listening', () => console.log('socket.io listening on port 42023!'));
 
-const express = require('express');
-const app = express();
-// TODO: no-cache ?
-app.use('/', express.static(__dirname + '/../frontend'));
-app.listen(42024, () => console.log('Frontend listening on port 42024!'));
+server.listen(42024, () => console.log('Frontend + Socket.IO listening on port 42024!'));
