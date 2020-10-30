@@ -5,7 +5,3 @@
 	}
 	reverse_proxy 127.0.0.1:42024
 }
-
-backend.{$HOST} {
-	reverse_proxy 127.0.0.1:42023
-}
