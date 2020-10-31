@@ -227,6 +227,29 @@ function getGradient(w, darken, brighten) {
 	return gradient;
 }
 
+function onResize() {
+	const w = window.innerWidth - 16;
+	const h = window.innerHeight - 16;
+	console.log('onResize', w, h);
+
+	const hButtons = 35;
+	const hRem = Math.max(1, Math.round(h - paletteCanvas.clientHeight - hButtons));
+	if (w / hRem > drawCanvas.width / drawCanvas.height) {
+		// screen is wider than canvas -> reduce canvas width
+		const wTarget = Math.round(drawCanvas.width / drawCanvas.height * hRem);
+		drawCanvas.style.width = `${wTarget}px`;
+		drawCanvas.style.height = `${hRem}px`;
+	} else {
+		// screen is taller than canvas -> reduce canvas height
+		const hTarget = Math.round(drawCanvas.height / drawCanvas.width * w);
+		drawCanvas.style.width = `${w}px`;
+		drawCanvas.style.height = `${hTarget}px`;
+	}
+
+	//drawCanvas
+	//paletteCanvas
+}
+
 window.onload = function onload() {
 	socket.emit('join', {
 		gameId,
@@ -261,4 +284,7 @@ window.onload = function onload() {
 	paletteCtx.fillRect(0, 1*h/3, w, h/3);
 	paletteCtx.fillStyle = getGradient(w, 0, 150); //brighten
 	paletteCtx.fillRect(0, 2*h/3, w, h/3);
+
+	window.onresize = onResize;
+	onResize();
 };
