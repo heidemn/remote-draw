@@ -1,7 +1,18 @@
 const express = require('express');
+const basicAuth = require('express-basic-auth');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+
+const USER = process.env.AUTH_USER || 'user';
+const PASSWORD = process.env.AUTH_PASSWORD || 'password';
+let users = {};
+users[USER] = PASSWORD;
+
+app.use(basicAuth({
+    users,
+    challenge: true // show login dialog
+}));
 
 // TODO: no-cache ?
 app.use('/', express.static(__dirname + '/../frontend'));

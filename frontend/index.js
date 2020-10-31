@@ -69,6 +69,8 @@ function updateGames(msg) {
 
 	let startGameButton = document.getElementById('new-game');
 	enable(startGameButton, !!name);
+	let nameLabel = document.getElementById('name-label');
+	nameLabel.style.color = name ? '#000' : '#f00';
 }
 
 function updateName() {
