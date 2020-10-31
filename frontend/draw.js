@@ -16,6 +16,15 @@ const clientId = generateId();
 const playerName = urlParams.get('name');
 const gameId = urlParams.get('join') || generateId();
 
+// Make sure that reloading the page leads to the current painting, instead of creating another one.
+// If a history entry should be created, use pushState() instead.
+if (!urlParams.get('join') && window.history.replaceState) {
+	const newURL = new URL(window.location.href);
+	const nameUrl = encodeURIComponent(playerName);
+	newURL.search = `?join=${gameId}&name=${nameUrl}`;
+	window.history.replaceState({ path: newURL.href }, '', newURL.href);
+}
+
 
 // const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 // const backendUrl = isLocal ?
