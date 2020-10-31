@@ -59,7 +59,7 @@ function updateGames(msg) {
 		let li = document.createElement('li');
 		let ago = timeago.format(game.started);
 		let players = game.players.length > 0 ? game.players.join(', ') : '- no painters -';
-		li.textContent = ago /*game.id*/ + ' (' + players + ') ';
+		li.textContent = 'Started ' + ago + ' (' + players + ') ';
 		let button = document.createElement('button');
 		button.textContent = 'Join painting';
 		button.onclick = joinGame.bind(window, game.id);

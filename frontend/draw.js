@@ -123,8 +123,8 @@ function scaledOffsetXY(e, canvas) {
 		// touch: https://stackoverflow.com/questions/17130940/retrieve-the-same-offsetx-on-touch-like-mouse-event
 		const rect = e.target.getBoundingClientRect();
 		return [
-			e.targetTouches[0].pageX - rect.left,
-			e.targetTouches[0].pageY - rect.top
+			(e.targetTouches[0].pageX - rect.left) * canvas.width / canvas.clientWidth,
+			(e.targetTouches[0].pageY - rect.top) * canvas.height / canvas.clientHeight
 		]
 	} else {
 		console.assert(false, 'Error: neither a valid mouse nor touch event!');
