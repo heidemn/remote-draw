@@ -39,7 +39,8 @@ app.use(PREFIX, express.static(__dirname + '/../frontend'));
 let games = {
 	// gameId: {
 	// 	gameId,
-	// 	clients: [{clientId, name}, ...]
+	// 	clients: [{clientId, name}, ...],
+	// 	clearColor: [r, g, b],
 	// 	picture
 	// }
 };
@@ -141,6 +142,7 @@ io.on('connection', socket => {
 			gameId,
 			started: Date.now(),
 			clients: [],
+			clearColor: [255, 255, 255],
 			picture: []
 		};
 		games[gameId].idleSince = undefined;
@@ -150,7 +152,7 @@ io.on('connection', socket => {
 		});
 
 		// Let new player get current painting:
-		io.to(gameId).emit('picture', games[gameId].picture);
+		io.to(gameId).emit('picture', { picture: games[gameId].picture, clearColor: games[gameId].clearColor });
 	});
 
 	socket.on('clear', msg => {
@@ -161,6 +163,7 @@ io.on('connection', socket => {
 		}
 
 		console.log('ON clear:', gameId, msg.color);
+		games[gameId].clearColor = msg.color;
 		games[gameId].picture = [];
 		io.to(gameId).emit('clear', msg);
 	});
@@ -179,7 +182,7 @@ io.on('connection', socket => {
 		//console.log('ON draw:', msg);
 		console.log('ON draw: gameId', gameId, 'client', msg.client, 'path.length', msg.path.length);
 		games[gameId].picture.push(msg);
-		io.to(gameId).emit('picture', games[gameId].picture);
+		io.to(gameId).emit('picture', { picture: games[gameId].picture, clearColor: games[gameId].clearColor });
 	});
 });
 

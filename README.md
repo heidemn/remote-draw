@@ -10,7 +10,7 @@ Legacy browsers not supported.
 
 ## Dependencies
 * Reverse Proxy: Caddy 2 https://caddyserver.com/
-* Backend: Node.js 12
+* Backend: Node.js 14 (version 12 probably also works)
 * Messaging: https://socket.io/
 * Server: https://github.com/expressjs/express
 * UI: https://github.com/hustcc/timeago.js
@@ -36,6 +36,7 @@ Open the website in multiple tabs to simulate multiple users.
 Preparations (once):
 
 * Sign up for Heroku free tier.
+* Install Heroku CLI.
 * Clone this repo.
 * `heroku create YOUR_APP_NAME` (once)
 

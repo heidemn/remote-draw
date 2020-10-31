@@ -92,13 +92,14 @@ function drawAll() {
 	drawCtx.strokeStyle = cssRGB(color);
 }
 
-function onPicture(msg) {
-	for (let pathObj of msg) {
+function onPicture(paths, clearColorIn) {
+	clearColor = clearColorIn;
+	for (let pathObj of paths) {
 		if (pathObj.client === clientId) {
 			drawnLocal = drawnLocal.filter(el => el.i !== pathObj.i);
 		}
 	}
-	drawnServer = msg; //.push(msg);
+	drawnServer = paths;
 	drawAll();
 }
 
@@ -268,7 +269,7 @@ window.onload = function onload() {
 	socket.on('clear', onClear);
 	socket.on('picture', function(msg) {
 		console.log('ON picture', msg);
-		onPicture(msg);
+		onPicture(msg.picture, msg.clearColor);
 	});
 
 	drawCanvas = document.getElementById('canvas');
