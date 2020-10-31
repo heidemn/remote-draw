@@ -12,7 +12,7 @@
 			<span id="name-label">Your Name:</span> <input id="name" oninput="updateName()" />
 		</p>
 
-		<p style="margin-bottom: 0;">Active paintings:</p>
+		<p style="margin-bottom: 0;">Current paintings:</p>
 		<ul id="games-list" style="margin-top: 5px;">
 			<li>(loading...)</li>
 			<!-- li, button Join painting -->
@@ -20,5 +20,10 @@
 		
 		<button id="new-game" onclick="startGame()">Start new painting</button>
 
+		<p>Idle paintings are deleted a few minutes after the last painter left.</p>
+
+		<div style="position: fixed; bottom: 5px; right: 5px;">
+			<a href="https://github.com/heidemn/remote-draw" target="_blank" rel="noopener noreferrer">github.com/heidemn/remote-draw</a>
+		</div>
 	</body>
 </html>

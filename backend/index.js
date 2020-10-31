@@ -4,18 +4,28 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-const USER = process.env.AUTH_USER || 'user';
-const PASSWORD = process.env.AUTH_PASSWORD || 'password';
-let users = {};
-users[USER] = PASSWORD;
+const USER = process.env.AUTH_USER;
+const PASSWORD = process.env.AUTH_PASSWORD;
+if (USER && PASSWORD) {
+	let users = {};
+	users[USER] = PASSWORD;
+	app.use(basicAuth({
+		users,
+		challenge: true // show login dialog
+	}));
+	console.log(`Added basic auth: username = ${USER}`);
+}
 
-app.use(basicAuth({
-    users,
-    challenge: true // show login dialog
-}));
+let PREFIX = process.env.URL_PREFIX || '/';
+if (!PREFIX.startsWith('/')) {
+	PREFIX = '/' + PREFIX;
+}
+if (!PREFIX.endsWith('/')) {
+	PREFIX += '/';
+}
 
 // TODO: no-cache ?
-app.use('/', express.static(__dirname + '/../frontend'));
+app.use(PREFIX, express.static(__dirname + '/../frontend'));
 
 //const io = require('socket.io')();
 // var rndWord = require('random-noun-generator-german');
@@ -44,6 +54,7 @@ let games = {
 // ];
 
 
+// Broadcast list of games.
 setInterval(() => {
 	let gamesList = [];
 	for (let gameId in games) {
@@ -56,6 +67,23 @@ setInterval(() => {
 	// Top: newest / bottom: oldest game
 	gamesList.sort((a, b) => b.started - a.started);
 	io.emit('games', {games: gamesList});
+}, 3000);
+
+// Cleanup idle games.
+const DELETE_AFTER_IDLE_MSEC = parseInt(process.env.DELETE_AFTER_IDLE_SEC || 10) * 1000;
+console.log(`DELETE_AFTER_IDLE_MSEC = ${DELETE_AFTER_IDLE_MSEC}`);
+setInterval(() => {
+	const now = Date.now();
+	for (let gameId in games) {
+		if (games[gameId].clients.length > 0) {
+			continue; // not idle
+		}
+		const idleMsec = now - games[gameId].idleSince;
+		if (idleMsec > DELETE_AFTER_IDLE_MSEC) {
+			console.log('*TERMINATE game:', gameId);
+			delete games[gameId];
+		}
+	}
 }, 3000);
 
 function getGameId(msg, mustExist = true) {
@@ -85,8 +113,10 @@ io.on('connection', socket => {
 				return el.clientId !== socketClientId;
 			});
 			if (games[gameId].clients.length === 0) {
-				console.log('*TERMINATE game:', gameId);
-				delete games[gameId];
+				games[gameId].idleSince = Date.now();
+				//console.log('*TERMINATE game:', gameId);
+				//delete games[gameId];
+				console.log('*IDLE game:', gameId);
 			}
 		}
 	});
@@ -113,6 +143,7 @@ io.on('connection', socket => {
 			clients: [],
 			picture: []
 		};
+		games[gameId].idleSince = undefined;
 		games[gameId].clients.push({
 			clientId: msg.clientId,
 			name: msg.name
@@ -153,4 +184,11 @@ io.on('connection', socket => {
 });
 
 const port = parseInt(process.env.PORT || 42024);
-server.listen(port, () => console.log(`Frontend + Socket.IO listening on port ${port}!`));
+server.listen(port, () => console.log(`Frontend + Socket.IO listening on port ${port}, frontend prefix = ${PREFIX}`));
+
+function sigHandler(sig) {
+	console.log(`Got ${sig} - exit.`);
+	process.exit(0);
+}
+process.on('SIGINT', sigHandler.bind(global, 'SIGINT'));
+process.on('SIGTERM', sigHandler.bind(global, 'SIGTERM'));
