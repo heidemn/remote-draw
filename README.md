@@ -32,8 +32,22 @@ backend$ npm start
 Afterwards, open http://localhost:42024 to enter the "lobby".  
 Open the website in multiple tabs to simulate multiple users.
 
-## Run on a Linux server with HTTPS
-If this wasn't just a PoC project, I would call this section "production use".
+## Deploy on Heroku
+Preparations (once):
+
+* Sign up for Heroku free tier.
+* Clone this repo.
+* `heroku create YOUR_APP_NAME` (once)
+
+(Re-)Deploy:
+
+* `./heroku-deploy.sh --login`  
+  (Option `--login` is probably only needed for first run.)  
+  (See script source for options to configure the app.)
+* Browser should open automatically; if not, open: `https://YOUR_APP_NAME.herokuapp.com/`
+
+## Deploy on a Linux server with HTTPS
+If you want to run the app on your "own" server.
 
 * Register your internet domain: `DOMAIN` (e.g. `example.com`).  
   Replace `DOMAIN` with your custom domain everywhere below.

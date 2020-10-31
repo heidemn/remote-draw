@@ -2,6 +2,16 @@
 set -ex
 
 #
+# LOGIN
+#
+
+if [ "$1" = "--login" ]; then
+	shift
+	heroku login
+	heroku container:login
+fi
+
+#
 # CONFIG
 #
 
@@ -27,15 +37,6 @@ if [ "$1" = "--idle-sec" ]; then
 	shift
 	heroku config:set DELETE_AFTER_IDLE_SEC="$1"
 	shift
-fi
-
-#
-# LOGIN
-#
-
-if [ "$1" = "--login" ]; then
-	shift
-	heroku container:login
 fi
 
 #
