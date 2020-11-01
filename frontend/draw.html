@@ -17,14 +17,15 @@
 		<canvas id="palette" width="1000" height="60" style="border: 1px solid black; width: 100%; height: auto; min-height: 45px;">
 		</canvas>
 		<br/>
-		<button id="clear" onclick="newPainting(0)">Clear
+		<button id="clear-color" onclick="newPainting(0)">Clear
 			<div id="current-color" style="display: inline-block; width: 20px; height: 10px; border: 1px solid black; background-color: #f00;"></div>
 		</button>
-		<button id="clear" onclick="newPainting(1)">Clear (white)</button> 
-		<button id="clear" onclick="newPainting(2)">Clear (black)</button>
+		<button id="clear-white" onclick="newPainting(1)">Clear (white)</button> 
+		<button id="clear-black" onclick="newPainting(2)">Clear (black)</button>
 
 		<div style="float: right;">
 			<a href="https://github.com/heidemn/remote-draw" target="_blank" rel="noopener noreferrer">github.com/heidemn/remote-draw</a>
 		</div>
+		<button onclick="toggleFullscreen()" style="float: right; margin-right: 15px;">Fullscreen</button>
 	</body>
 </html>

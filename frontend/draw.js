@@ -260,6 +260,14 @@ function onResize() {
 	//paletteCanvas
 }
 
+function toggleFullscreen() {
+	if (document.fullscreenElement) {
+		document.exitFullscreen();
+	} else {
+		document.body.requestFullscreen();
+	}
+}
+
 window.onload = function onload() {
 	socket.emit('join', {
 		gameId,
