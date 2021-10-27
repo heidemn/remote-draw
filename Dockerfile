@@ -1,4 +1,4 @@
-FROM node:14-alpine AS builder
+FROM node:16-alpine AS builder
 
 COPY backend/package* /app/backend/
 RUN cd /app/backend && npm ci --production
@@ -18,7 +18,7 @@ RUN rm -r node_modules0
 
 ############################################
 
-FROM node:14-alpine
+FROM node:16-alpine
 
 COPY --from=builder /app /app
 
